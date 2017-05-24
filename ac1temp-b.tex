@@ -1,0 +1,271 @@
+\hsize=6.25truein
+\vsize=9.65truein
+\tolerance=15000
+\pretolerance=15000
+\parindent=0.0in
+\font\sym=cmex10
+\def\up#1{\raise3em\hbox{#1}}
+\def\textindent#1{\noindent\llap{#1\enspace}\ignorespaces}
+\def\llap#1{\noindent\hbox to \parindent{#1\hfil}}
+\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+\def\setupverbatim{\tt
+ \obeylines \uncatcodespecials \obeyspaces }
+{\obeyspaces\global\let =\ } %
+\def\verbatim{\begingroup\setupverbatim\doverbatim}
+\def\doverbatim#1{\def\next##1#1{##1\endgroup}\next}
+\font\dunh=cmdunh10 at 10 truept
+\font\vtt=cmvtt10 at 10 truept
+\font\ssdc=cmssdc10 at 10 truept
+\font\sans=cmss10 at 10 truept
+\font\fib=cmfib8 at 8 truept
+\font\fun=cmff10 at 10 truept
+\font\ttt=cmtt10 at 10 truept
+\def\today{\ifcase\month\or
+   January\or February\or March\or April\or May\or June\or July\or
+   August\or September\or October\or November\or December\fi
+   \space\number\year}
+\def\bks{$\backslash$}
+\def\display{\obeylines\parindent=0.5in\ttt}
+\def\dv1{\bigskip\bigskip}
+\def\dvd{\bigskip\bigskip\filbreak}
+\font\largeb=cmbx10 scaled\magstep1
+\font\larger=cmr10 scaled\magstep1
+\font\bigbig=cmr10 scaled\magstep4
+\font\ft=cmr5 at 5 truept
+\font\st=cmr7 at 7 truept
+\footline{\rm MAP\hfil\folio\hfil\today}
+Reference: MAP\_NEURAL\_AC1TEMP
+\medskip
+\centerline{\bf MAP PROGRAM LIBRARY}
+\bigskip
+\bigskip
+\bigskip
+{\largeb  Subroutine MAP\_NEURAL\_AC1TEMP}
+\bigskip\bigskip
+\parindent=0.5in
+\item {\bf 1.} {\largeb Provenance of Source Code}
+\bigskip
+\item {} H.K.D.H. Bhadeshia, Phase Transformations Group, Department of Materials Science and Metallurgy, University of Cambridge, Cambridge, UK.
+\dv1
+\item {\bf 2.} {\largeb  Purpose}
+\bigskip
+\item {} To predict the $Ac_1$ temperature of steel as a function of the chemical 
+composition and heating rate.
+\dv1
+\item{\bf 3.} {\largeb  Specification}
+\bigskip
+\item {} ~SUBROUTINE MAP\_NEURAL\_AC1TEMP(AW,W1,W2,THETA1,THETA2,AMIN,AMAX,
+\item {} \&IMAX,Y,HT,IERR,IN,IHID,ERROR)
+\medskip
+\item {} ~DOUBLE PRECISION AW(22),W1(4,22),W2(4),THETA1(4),THETA2,
+\item {} \&AMIN(22),AMAX(22),Y(20),HT(20),ERROR
+\medskip
+\item {} ~INTEGER IERR(20),IMAX,IN,IHID
+\dv1
+\item{\bf 4.} {\largeb  Description}
+\bigskip
+\item {} MAP\_NEURAL\_AC1TEMP uses neural network analysis to predict the
+temperature of the onset of austenite formation.
+\medskip
+\item {} The neural net was trained using 394 of a database of 788 examples
+constructed using information from Refs [2 - 7]. The remaining 394 examples
+were used as `new' experiments to test the trained network. This database
+is in the file ``neural\_dataset''.
+\medskip
+\item {} Two input data files are needed for programs using MAP\_NEURAL\_AC1TEMP -
+\item {} ACINPUT (which contains the information on the chemical composition of the
+steel, and is read into the array AW), and AC1 (which contains neural information,
+and should not be altered).
+\dv1
+\item{\bf 5.} {\largeb  References}
+\bigskip
+\item {} 1. L. Gavard, H.K.D.H. Bhadeshia, D.J.C. MacKay, and S. Suzuki,
+ Bayesian Neural Network Model for Austenite Formation in Steels,
+{\it Materials Science and Technology}, 1996, $\underline {12}$, 453-463.
+\medskip
+\item {} 2. G.F. Vander Vroot, ed., {\it Atlas of 
+Time-Temperature-Transformation Diagrams for Irons and Steels}, ASM 
+International, Ohio, USA, (1991).
+\medskip
+\item {} 3. Special Report 56, {\it Atlas of Isothermal Transformation
+Diagrams of B.S. En Steels}, 2nd edition, Iron and Steel Institute, London,
+(1956).
+\medskip
+\item {} 4. T. Cool, Systematic Design of Welding Alloys for Power Plant
+Steels, CPGS Thesis, University of Cambridge, (1994).
+\medskip
+\item {} 5. K. Akibo, {\it Scientific American (Japanese Edition)},
+(January 1993), 20-29.
+\medskip
+\item {} 6. R. Reed, Ph.D. Thesis, University of Cambridge, (1987).
+\medskip
+\item {} 7. Phase Transformation Kinetics and Hardenability of Medium Alloy
+Steels, Climax \item {} Molybdenum Company, Connecticut, USA, (1972).
+\dv1
+\item{\bf 6.} {\largeb  Parameters}
+\bigskip
+\item {} {\bf Input parameters}
+\bigskip
+\item {} AW - real array of dimension 22
+\item {} \indent AW contains the input data from the file ACINPUT, which
+includes the chemical \indent composition of the steel. See Section 9.2 for details
+of an example file.
+\medskip
+\item {} AMIN - real array of dimension 22
+\item {} \indent AMIN contains the minimum unnormalised values of the input
+variables (from the \indent input file AC1).
+\medskip
+\item {} AMAX - real array of dimension 22
+\item {} \indent AMAX contains the maximum unnormalised values of the input 
+variables (from the \indent input file AC1).
+\medskip
+\item {} THETA1 - real array of dimension 4
+\item {} \indent THETA1 contains the biases associated with W1, and is
+read in from the file AC1.
+\medskip
+\item {} THETA2 - real 
+\item {} \indent THETA2 is the bias associated with W2, and is read
+in from the file AC1.
+\medskip
+\item {} W1 - real array of dimension (4,22)
+\item {} \indent W1 contains weights read in from the file AC1, which are
+coefficients used in the \indent prediction of the $Ac_1$ temperature.
+\medskip
+\item {} W2 - real array of dimension 4
+\item {} \indent W2 contains weights read in from the file AC1, which are
+coefficients used in the \indent  prediction of the $Ac_1$ temperature.
+\medskip
+\item {} IN - integer
+\item {} \indent IN is the number of inputs (22 for this model).
+\medskip
+\item {} IHID - integer
+\item {} \indent IHID is the number of hidden units (4 for this model).
+\medskip
+\item {} IMAX - integer
+\item {} \indent IMAX is the number of heating rates calculated ($<$ 20).
+\dv1
+\item {} {\bf Output parameters}
+\bigskip
+\item {} HT - real array of dimension IMAX ($<$ 20)
+\item {} \indent HT contains the heating rates (in kelvin per second).
+\medskip
+\item {} Y - real array of dimension IMAX
+\item {} \indent Y contains the $Ac_1$ temperature for each HT.
+\medskip
+\item {} IERR - integer array of dimension IMAX
+\item {} \indent IERR=0 if all inputs are within the range of the training
+dataset for the neural network \indent (so the 95\% confidence error bars are at about
+$\pm$ 11\%). 
+\medskip
+\item {} \indent IERR=1 if some inputs are outside the range of the training 
+set for the neural network \indent (so the 95\% confidence error bars may then be greater than
+$\pm$ 11\%).
+\medskip
+\item {} \indent See Ref [1] for further details.
+\medskip
+\item {} ERROR - real
+\item {} \indent ERROR is set at $\pm$ ERROR/2 for 95\% confidence error limits (in joules).
+\dv1
+\vfill \eject
+\item{\bf 7.} {\largeb  Error Indicators}
+\bigskip
+\item {} IERR is an integer array of dimension IMAX. 
+\medskip
+\item {} \indent IERR=0 if all inputs are within the range of the training
+dataset for the neural network \indent (so the 95\% confidence error bars are at about
+$\pm$ 11\%).
+\medskip
+\item {} \indent IERR=1 if some inputs are outside the range of the training
+set for the neural network \indent (so the 95\% confidence error bars may then be greater than
+$\pm$ 11\%).
+\dv1
+\item{\bf 8.} {\largeb  Accuracy}
+\medskip
+\item {} N/A
+\dv1
+\item{\bf 9.} {\largeb  Further Comments}
+\bigskip
+\item {} Used in the program MAP\_NEURAL\_STEEL.
+\dv1
+\item{\bf 10.} {\largeb  Example}
+\bigskip
+\item{} {\bf 10.1 Program text}
+\bigskip
+\item {}       ~DOUBLE PRECISION W1(4,22), W2(4),THETA1(4), THETA2
+\item {}    \&AMIN(23),AMAX(23),AW(22),Y(20),HT(20),ERROR
+\item {}       ~INTEGER IN,IHID,IDUM,IMAX,IERR(20)
+\item {}        ~IN=22
+\item {}        ~IHID=4
+\item {}        ~IMAX=5
+\item {}        ~OPEN(UNIT=1, FILE='ACINPUT')
+\item {}        ~DO 10 I=1,22
+\item {}        ~~~~READ(1,*) AW(I)
+\item {~ 10}    ~CONTINUE
+\item {}        ~OPEN(UNIT=2, FILE='AC1')
+\item {}        ~DO 20 I=1,IN+1
+\item {}        ~~~~READ(2,*) IDUM,AMIN(I),AMAX(I)
+\item {~ 20}    ~CONTINUE
+\item {}       ~DO 30 I=1,IHID
+\item {}       ~~~~READ(2,*) THETA1(I)
+\item {}       ~~~~DO 40 J=1,IN
+\item {}       ~~~~~~~READ(2,*) W1(I,J)
+\item {~ 40}   ~~~~CONTINUE
+\item {~ 30}   ~CONTINUE
+\item {}       ~READ(2,*) THETA2
+\item {}       ~DO 50 I=1,IHID
+\item {}       ~~~~READ(2,*) W2(I)
+\item {~ 50}   ~CONTINUE
+\item {}       ~CALL AC1TEMP(AW,W1,W2,THETA1,THETA2,AMIN,AMAX,IMAX,Y,HT,
+\item {}       \&IERR,IN,IHID,ERROR)
+\item {}       ~DO 100 I=1,IMAX
+\item {}       ~~~~WRITE(6,200) HT(I),Y(I),IERR(I)
+\item {~ 200}  ~~~~FORMAT(5X,2F11.4,2X,I2)
+\item {~ 100}  ~CONTINUE
+\item {}        ~STOP
+\item {}        ~END
+\dv1
+\vfill \eject
+\item {} {\bf 10.2 Program data}
+\bigskip
+\item {} An example ACINPUT file:-
+\bigskip
+\item {0.2}\indent	 C
+\item {0.0}\indent 	 Si
+\item {0.0}\indent	 Mn
+\item {0.000}\indent 	 S
+\item {0.000}\indent	 P
+\item {0.00}\indent	 Cu
+\item {0.0}\indent	Ni
+\item {5.0}\indent	Cr
+\item {0.0}\indent	Mo
+\item {0.0}\indent	Nb
+\item {0.0}\indent	V
+\item {0.00}\indent	Ti
+\item {0.00}\indent     Al
+\item {0.000}\indent   B
+\item {0.0}\indent     W
+\item {0.000}\indent	As
+\item {0.000}\indent	Sn
+\item {0.000}\indent	Zr
+\item {0.0}\indent	Co
+\item {0.000}\indent	N
+\item {0.000}\indent	O
+\item {1.0}\indent	Heating rate
+\dv1
+\item {} {\bf 10.3 Program results}
+\bigskip
+\item {0.0100} \indent  855.7674 \indent  1
+\item {0.1000} \indent  855.9666 \indent  0
+\item {1.0000} \indent  857.9337 \indent  0
+\item {10.000} \indent  874.2388 \indent  0
+\item {100.00} \indent  636.1600 \indent  1
+\dv1
+\item{\bf 11.} {\largeb  Auxiliary Routines}
+\bigskip
+\item {} None
+\dv1
+\item{\bf 12.} {\largeb  Keywords}
+\bigskip
+\item {} neural net, austenite formation
+\bye
+

@@ -1,0 +1,294 @@
+               Materials Algorithms Project
+               Program Library
+
+  ------------------------------------------------------------------------
+
+Program MAP_NEURAL_STEEL
+
+  1. Provenance of code.
+  2. Purpose of code.
+  3. Specification.
+  4. Description of subroutine's operation.
+  5. References.
+  6. Parameter descriptions.
+  7. Error indicators.
+  8. Accuracy estimate.
+  9. Any additional information.
+ 10. Example of code
+ 11. Auxiliary subroutines required.
+ 12. Keywords.
+ 13. Download source code.
+ 14. Links.
+
+  ------------------------------------------------------------------------
+
+Provenance of Source Code
+
+H.K.D.H. Bhadeshia,
+Phase Transformations Group,
+Department of Materials Science and Metallurgy,
+University of Cambridge,
+Cambridge, U.K.
+
+Program modified: March 1999.
+
+
+
+Purpose
+
+To predict the Ac1 and Ac3 temperatures of steel as functions of the
+chemical compositions and the heating rate.
+
+
+
+Specification
+
+ Language:    FORTRAN
+ Product form:Source code;
+              Compiled program for a PC with MSDOS. It will run on any IBM
+              PC clone.
+
+DOUBLE PRECISION THETA2, THETB2, ERROR
+DOUBLE PRECISION AMIN(23),AMAX(23),AW(23),HT(20),THETA1(4)
+DOUBLE PRECISION THETB1(2),W1(4,22),W1B(2,22),W2(4),W2B(2),Y(20)
+INTEGER IERR(20),I,IHID,IMAX,IN
+
+
+
+Description
+
+MAP_NEURAL_STEEL uses neural network analysis to predict the Ac1 and Ac3
+temperatures of steel. The Ac1 temperature is the temperature at the onset
+of austenite formation. The Ac3 temperature is the temperature at the
+completion of austenite formation.
+
+The neural net was trained using 394 of a database of 788 examples, that was
+constructed using information from published literature (Refs [2-7]). The
+remaining 394 examples were used as `new' experiments to test the trained
+network.
+
+Optimum values for the number of hidden units (4 for Ac1 and 2 for Ac3) were
+obtained from this. The whole dataset was then used to retrain the net to
+give more accurate values for the weights.
+
+The data that were used originally to train the neural network are are also
+available for downloading. These data are not necessary to use the software
+for the estimation of Ac1 and Ac3 temperature. They are nevertheless
+available should you wish to conduct your own analysis. The file data.notes
+contains information about the data in the database.
+
+To run the program MAP_NEURAL_STEEL the following input files are
+required :-
+
+ACINPUT
+     contains information on the chemical composition of the steel. An
+     example ACINPUT is provided along with the source code.
+     NB: It is necessary to properly specify the trace elements, which are
+     in practice always there even though you may not have the analysis
+     data. If the latter is true, then it is better to set the trace
+     elements to average values rather than zero, since zero has a very
+     significant meaning.
+
+AC1, AC3
+     contain neural information, and should not be altered. These files are
+     also provided.
+
+
+
+References
+
+  1. L. Gavard, H.K.D.H. Bhadeshia, D.J.C. MacKay, and S. Suzuki, Bayesian
+     Neural Network Model for Austenite Formation in Steels, Materials
+     Science and Technology, 12, (1996), 453-463.
+
+  2. G.F. Vander Vroot, ed., Atlas of Time-Temperature-Transformation
+     Diagrams for Irons and Steels, ASM International, Ohio, USA, (1991).
+
+  3. Special Report 56, Atlas of Isothermal Transformation Diagrams of B.S.
+     En Steels}, 2nd edition, Iron and Steel Institute, London, (1956).
+
+  4. T. Cool, Systematic Design of Welding Alloys for Power Plant Steels,
+     CPGS Thesis, University of Cambridge, (1994).
+
+  5. K. Akibo, Scientific American (Japanese Edition), (January 1993),
+     20-29.
+
+  6. R. Reed, Ph.D. Thesis, University of Cambridge, (1987).
+
+  7. Phase Transormation Kinetics and Hardenability of Medium Alloy Steels,
+     Climax Molybdenum Company, Connecticut, USA, (1972).
+
+
+
+Parameters
+
+Input parameters
+
+AW - real array of dimension 23
+     AW contains the input data from the file ACINPUT, which includes the
+     chemical composition of the steel. See below for details of an example
+     file.
+
+AMIN - real array of dimension 23
+     AMIN contains the minimum unnormalised values of the input variables
+     (from the input files AC1 and AC3).
+
+AMAX - real array of dimension 23
+     AMAX contains the maximum unnormalised values of the input variables
+     (from the input files AC1 and AC3).
+
+THETA1 - real array of dimension 4
+     THETA1 contains the biases associated with W1, and is read in from the
+     file AC1.
+
+THETA2 - real
+     THETA2 is the bias associated with W2, and is read in from the file
+     AC1.
+
+W1 - real array of dimension (4,22)
+     W1 contains weights read in from the file AC1, which are coefficients
+     used in the prediction of the Ac1 temperature.
+
+W2 - real array of dimension 4
+     W2 contains weights read in from the file AC1, which are coefficients
+     used in the prediction of the Ac1 temperature.
+
+THETB1 - real array of dimension 2
+     THETB1 contains the biases associated with W1B, and is read in from the
+     file AC3.
+
+THETB2 - real
+     THETB2 is the bias associated with W2B, and is read in from the file
+     AC3.
+
+W1B - real array of dimension (2,22)
+     W1B contains weights read in from the file AC3, which are coefficients
+     used in the prediction of the Ac3 temperature.
+
+W2B - real array of dimension 2
+     W2B contains weights read in from the file AC3, which are coefficients
+     used in the prediction of the Ac3 temperature.
+
+Output parameters
+
+The program gives the Ac1 and Ac3 temperatures for a range of heating rates.
+See below for an example showing the format of the output.
+
+
+
+Error Indicators
+
+None.
+
+
+
+Accuracy
+
+The neural net was trained using 394 examples from the available database.
+
+The error is set at ±20% for 95% error limits.
+
+If the temperature should become negative during the course of the
+calculation of the Ac1 or Ac3 temperatures it is set to zero.
+
+
+
+Further Comments
+
+None.
+
+
+
+Example
+
+1. Program text
+
+       Complete program.
+
+2. Program data
+
+0.2      C
+0.0      Si
+0.0      Mn
+0.0      S
+0.0      P
+0.0      Cu
+0.0      Ni
+5.0      Cr
+0.0      Mo
+0.0      Nb
+0.0      V
+0.0      Ti
+0.0      Al
+0.0      B
+0.0      W
+0.0      As
+0.0      Sn
+0.0      Zr
+0.0      Co
+0.0      N
+0.0      O
+1.0      Heating rate
+
+3. Program results
+
+      **      Austenite Formation Temperatures    **
+
+Carbon       0.200  wt.% Silicon            0.000  wt.%
+Manganese    0.000  wt.% Sulphur            0.000  wt.%
+Phosphorus   0.000  wt.% Copper             0.000  wt.%
+Nickel       0.000  wt.% Chromium           5.000  wt.%
+Molybdenum   0.000  wt.% Niobium            0.0000 wt.%
+Vanadium     0.000  wt.%
+Titanium     0.000  wt.% Aluminium          0.000  wt.%
+Boron        0.0000 wt.% Tungsten           0.000  wt.%
+Arsenic      0.000  wt.% Tin                0.000  wt.%
+Zirconium    0.000  wt.% Cobalt             0.000  wt.%
+Nitrogen     0.0000 wt.% Oxygen             0.0000 wt.%
+
+Ac1  C       +- Error  C      Heating Rate  C/s
+     856.       > 40.                0.0100
+     856.         40.                0.1000
+     858.         40.                1.0000
+     874.         40.               10.0000
+     636.       > 40.              100.0000
+
+Ac3  C       +- Error  C      Heating Rate  C/s
+     824.       > 40.                0.0100
+     824.         40.                0.1000
+     826.         40.                1.0000
+     847.         40.               10.0000
+     903.       > 40.              100.0000
+
+
+
+
+Auxiliary Routines
+
+MAP_NEURAL_AC1TEMP
+MAP_NEURAL_AC3TEMP
+
+
+
+Keywords
+
+neural network, austenite formation
+
+
+
+Download
+
+Download source code, data files and sample input data file
+Download compiled program
+Download previous network data
+
+
+  ------------------------------------------------------------------------
+
+ MAP originated from a joint project of the National Physical Laboratory and
+                        the University of Cambridge.
+
+               MAP Website administration / map@msm.cam.ac.uk
+
+
+          ---------------------------------------------------------

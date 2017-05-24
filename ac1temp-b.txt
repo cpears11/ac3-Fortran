@@ -1,0 +1,284 @@
+               Materials Algorithms Project
+               Program Library
+
+  ------------------------------------------------------------------------
+
+Subroutine MAP_NEURAL_AC1TEMP
+
+  1. Provenance of code.
+  2. Purpose of code.
+  3. Specification.
+  4. Description of subroutine's operation.
+  5. References.
+  6. Parameter descriptions.
+  7. Error indicators.
+  8. Accuracy estimate.
+  9. Any additional information.
+ 10. Example of code
+ 11. Auxiliary subroutines required.
+ 12. Keywords.
+ 13. Download source code.
+ 14. Links.
+
+  ------------------------------------------------------------------------
+
+Provenance of Source Code
+
+H.K.D.H. Bhadeshia,
+Phase Transformations Group,
+Department of Materials Science and Metallurgy,
+University of Cambridge,
+Cambridge, U.K.
+
+
+
+Purpose
+
+To predict the Ac1 temperature of steel as a function of the chemical
+composition and heating rate.
+
+
+
+Specification
+
+ Language:    FORTRAN
+ Product form:Source code
+
+SUBROUTINE MAP_NEURAL_AC1TEMP(AW,W1,W2,THETA1,THETA2,AMIN,AMAX,
+&IMAX,Y,HT,IERR,IN,IHID,ERROR)
+
+DOUBLE PRECISION AW(22),W1(4,22),W2(4),THETA1(4),THETA2,
+&AMIN(22),AMAX(22),Y(20),HT(20),ERROR
+
+INTEGER IERR(20),IMAX,IN,IHID
+
+
+
+Description
+
+MAP_NEURAL_AC1TEMP uses neural network analysis to predict the temperature
+of the onset of austenite formation.
+
+The neural net was trained using 394 of a database of 788 examples
+constructed using information from Refs [2 - 7]. The remaining 394 examples
+were used as `new' experiments to test the trained network. This database is
+in the file `neural_dataset'.
+
+Two input data files are needed for programs using MAP_NEURAL_AC1TEMP -
+ACINPUT (which contains the information on the chemical composition of the
+steel, and is read into the array AW), and AC1 (which contains neural
+information, and should not be altered). These files are provided with the
+program MAP_NEURAL_STEEL.
+
+
+
+References
+
+  1. L. Gavard, H.K.D.H. Bhadeshia, D.J.C. MacKay, and S. Suzuki, Bayesian
+     Neural Network Model for Austenite Formation in Steels, Materials
+     Science and Technology, 1996, vol. 12, 453-463.
+  2. G.F. Vander Vroot, ed., Atlas of Time-Temperature- Transformation
+     Diagrams for Irons and Steels, ASM International, Ohio, USA, (1991).
+  3. Special Report 56, Atlas of Isothermal Transformation Diagrams of B.S.
+     En Steels, 2nd edition, Iron and Steel Institute, London, (1956).
+  4. T. Cool, Systematic Design of Welding Alloys for Power Plant Steels,
+     CPGS Thesis, University of Cambridge, (1994).
+  5. K. Akibo, Scientific American (Japanese Edition), (January 1993),
+     20-29.
+
+  6. R. Reed, Ph.D. Thesis, University of Cambridge, (1987).
+  7. Phase Transformation Kinetics and Hardenability of Medium Alloy Steels,
+     Climax Molybdenum Company, Connecticut, USA, (1972).
+
+
+
+Parameters
+
+Input parameters
+
+AW - real array of dimension 22
+     AW contains the input data from the file ACINPUT, which includes the
+     chemical composition of the steel. See below for details of an example
+     file.
+
+AMIN - real array of dimension 22
+     AMIN contains the minimum unnormalised values of the input variables
+     (from the input file AC1).
+
+AMAX - real array of dimension 22
+     AMAX contains the maximum unnormalised values of the input variables
+     (from the input file AC1).
+
+THETA1 - real array of dimension 4
+     THETA1 contains the biases associated with W1, and is read in from the
+     file AC1.
+
+THETA2 - real
+     THETA2 is the bias associated with W2, and is read in from the file
+     AC1.
+
+W1 - real array of dimension (4,22)
+     W1 contains weights read in from the file AC1, which are coefficients
+     used in the prediction of the Ac1 temperature.
+
+W2 - real array of dimension 4
+     W2 contains weights read in from the file AC1, which are coefficients
+     used in the prediction of the Ac1 temperature.
+
+IN - integer
+     IN is the number of inputs (22 for this model).
+
+IHID - integer
+     IHID is the number of hidden units (4 for this model).
+
+IMAX - integer
+     IMAX is the number of heating rates calculated (< 20).
+
+Output parameters
+
+HT - real array of dimension IMAX (< 20)
+     HT contains the heating rates (in kelvin per second).
+
+Y - real array of dimension IMAX
+     Y contains the Ac1 temperature for each HT.
+
+IERR - integer array of dimension IMAX
+     IERR=0 if all inputs are within the range of the training dataset for
+     the neural network (so the 95% confidence error bars are at about
+     ±11%).
+     IERR=1 if some inputs are outside the range of the training set for the
+     neural network (so the 95% confidence error bars may then be greater
+     than ±11%).
+     See Ref [1] for further details.
+
+ERROR - real
+     ERROR is set at ±ERROR/2 for 95% confidence error limits (in joules).
+
+
+
+Error Indicators
+
+IERR is an integer array of dimension IMAX.
+
+IERR=0 if all inputs are within the range of the training dataset for the
+neural network (so the 95% confidence error bars are at about ±11%).
+
+IERR=1 if some inputs are outside the range of the training set for the
+neural network (so the 95% confidence error bars may then be greater than
+±11%).
+
+
+
+Accuracy
+
+N/A
+
+
+
+Further Comments
+
+Used in the program MAP_NEURAL_STEEL.
+
+
+
+Example
+
+1. Program text
+
+       DOUBLE PRECISION W1(4,22), W2(4),THETA1(4), THETA2
+&      AMIN(23),AMAX(23),AW(22),Y(20),HT(20),ERROR
+       INTEGER IN,IHID,IDUM,IMAX,IERR(20)
+       IN=22
+       IHID=4
+       IMAX=5
+       OPEN(UNIT=1, FILE='ACINPUT')
+       DO 10 I=1,22
+        READ(1,*) AW(I)
+10     CONTINUE
+       OPEN(UNIT=2, FILE='AC1')
+       DO 20 I=1,IN+1
+        READ(2,*) IDUM,AMIN(I),AMAX(I)
+20     CONTINUE
+       DO 30 I=1,IHID
+        READ(2,*) THETA1(I)
+        DO 40 J=1,IN
+         READ(2,*) W1(I,J)
+40      CONTINUE
+30     CONTINUE
+       READ(2,*) THETA2
+       DO 50 I=1,IHID
+        READ(2,*) W2(I)
+50     CONTINUE
+       CALL AC1TEMP(AW,W1,W2,THETA1,THETA2,AMIN,AMAX,IMAX,Y,HT,
+&      IERR,IN,IHID,ERROR)
+       DO 100 I=1,IMAX
+        WRITE(6,200) HT(I),Y(I),IERR(I)
+200    FORMAT(5X,2F11.4,2X,I2)
+100    CONTINUE
+       STOP
+       END
+
+2. Program data
+
+An example ACINPUT file:-
+
+0.2      C
+0.0      Si
+0.0      Mn
+0.000    S
+0.000    P
+0.00     Cu
+0.0      Ni
+5.0      Cr
+0.0      Mo
+0.0      Nb
+0.0      V
+0.00     Ti
+0.00     Al
+0.000    B
+0.0      W
+0.000    As
+0.000    Sn
+0.000    Zr
+0.0      Co
+0.000    N
+0.000    O
+1.0      Heating rate
+
+3. Program results
+
+  0.0100  855.7674    1
+  0.1000  855.9666    0
+  1.0000  857.9337    0
+ 10.000   874.2388    0
+100.00    636.1600    1
+
+
+
+Auxiliary Routines
+
+None.
+
+
+
+Keywords
+
+neural network, austenite formation
+
+
+
+Download
+
+Download source code
+
+
+
+  ------------------------------------------------------------------------
+
+ MAP originated from a joint project of the National Physical Laboratory and
+                        the University of Cambridge.
+
+               MAP Website administration / map@msm.cam.ac.uk
+
+
+        ---------------------------------------------------------

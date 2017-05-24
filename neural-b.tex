@@ -1,0 +1,273 @@
+\hsize=6.25truein
+\vsize=9.65truein
+\tolerance=15000
+\pretolerance=15000
+\parindent=0.0in
+\font\sym=cmex10
+\def\up#1{\raise3em\hbox{#1}}
+\def\textindent#1{\noindent\llap{#1\enspace}\ignorespaces}
+\def\llap#1{\noindent\hbox to \parindent{#1\hfil}}
+\def\uncatcodespecials{\def\do##1{\catcode`##1=12 }\dospecials}
+\def\setupverbatim{\tt
+ \obeylines \uncatcodespecials \obeyspaces }
+{\obeyspaces\global\let =\ } %
+\def\verbatim{\begingroup\setupverbatim\doverbatim}
+\def\doverbatim#1{\def\next##1#1{##1\endgroup}\next}
+\font\dunh=cmdunh10 at 10 truept
+\font\vtt=cmvtt10 at 10 truept
+\font\ssdc=cmssdc10 at 10 truept
+\font\sans=cmss10 at 10 truept
+\font\fib=cmfib8 at 8 truept
+\font\fun=cmff10 at 10 truept
+\font\ttt=cmtt10 at 10 truept
+\def\today{\ifcase\month\or
+   January\or February\or March\or April\or May\or June\or July\or
+   August\or September\or October\or November\or December\fi
+   \space\number\year}
+\def\bks{$\backslash$}
+\def\display{\obeylines\parindent=0.5in\ttt}
+\def\dv1{\bigskip\bigskip}
+\def\dvd{\bigskip\bigskip\filbreak}
+\font\largeb=cmbx10 scaled\magstep1
+\font\larger=cmr10 scaled\magstep1
+\font\bigbig=cmr10 scaled\magstep4
+\font\ft=cmr5 at 5 truept
+\font\st=cmr7 at 7 truept
+\footline{\rm MAP\hfil\folio\hfil\today}
+Reference: MAP\_NEURAL\_STEEL
+\medskip
+\centerline{\bf MAP PROGRAM LIBRARY}
+\bigskip
+\bigskip
+\bigskip
+{\largeb  Program MAP\_NEURAL\_STEEL}
+\bigskip\bigskip
+\parindent=0.5in
+\item {\bf 1.} {\largeb Provenance of Source Code}
+\bigskip
+\item {} H.K.D.H. Bhadeshia, Phase Transformations Group, Department of Materials Science and Metallurgy, University of Cambridge, Cambridge, UK.
+\medskip
+\item {} Modified: March 1999.
+\dv1
+\item {\bf 2.} {\largeb  Purpose}
+\bigskip
+\item {} To predict the $Ac_1$ and $Ac_3$ temperatures of steel as functions
+of the chemical compositions and the heating rate.
+\dv1
+\item{\bf 3.} {\largeb  Specification}
+\bigskip
+{\settabs\+\indent&Program form: &\cr
+\+ &Language:&FORTRAN\cr
+\+ &Product form:&Source code;\cr
+\+ & &Compiled program for a PC with MSDOS. It wil run on any IBM PC clone.\cr}
+\bigskip
+\ttt
+{\obeyspaces
+\item {} DOUBLE PRECISION THETA2, THETB2, ERROR
+\item {} DOUBLE PRECISION AMIN(23),AMAX(23),AW(23),HT(20),THETA1(4)
+\item {} DOUBLE PRECISION THETB1(2),W1(4,22),W1B(2,22),W2(4),W2B(2),Y(20)
+\item {} INTEGER IERR(20),I,IHID,IMAX,IN }
+\rm
+\dv1
+\item{\bf 4.} {\largeb  Description}
+\bigskip
+\item {} MAP\_NEURAL\_STEEL uses neural network analysis to predict the
+$Ac_1$ and $Ac_3$ temperatures of steel. 
+\medskip
+\item {} The $Ac_1$ temperature is the temperature at the onset of austenite 
+formation. The $Ac_3$ temperature is the temperature at the completion of 
+austenite formation.
+\medskip
+\item {} The neural net was trained using 394 of a database of 788 examples,
+that was constructed using information from published literature (Refs [2-7]).
+The remaining 394 examples were used as `new' experiments to test the
+trained network.
+Optimum values for the number of hidden units (4 for $Ac_1$ and 2 for $Ac_2$)
+were obtained from this. The whole dataset was then used to retrain the
+net to give more accurate values for the weights.
+\medskip
+\item {} The database is in the file ``database''. This file, and accompanying explanatory notes, are also available for download.
+\bigskip
+\item {} To run the program MAP\_NEURAL\_STEEL the following input files
+are required:-
+\medskip
+\item {} ACINPUT  - contains information on the chemical composition of the 
+steel. An example ACINPUT is provided.
+\medskip
+\item {} AC1, AC3 -  contain neural information, and should not be altered.  These files are also provided.
+\dv1
+\vfill \eject
+\item{\bf 5.} {\largeb  References}
+\bigskip
+\item {} 1. L. Gavard, H.K.D.H. Bhadeshia, D.J.C. MacKay, and S. Suzuki,
+ Bayesian Neural Network Model for Austenite Formation in Steels,
+{\it Materials Science and Technology}, {$\underline {12}$}, (1996), 453-463.
+\medskip
+\item {} 2. G.F. Vander Vroot, ed., {\it Atlas of 
+Time-Temperature-Transformation Diagrams for Irons and Steels}, ASM 
+International, Ohio, USA, (1991).
+\medskip
+\item {} 3. Special Report 56, {\it Atlas of Isothermal Transformation
+Diagrams of B.S. En Steels}, 2nd edition, Iron and Steel Institute, London,
+(1956).
+\medskip
+\item {} 4. T. Cool, Systematic Design of Welding Alloys for Power Plant
+Steels, CPGS Thesis, University of Cambridge, (1994).
+\medskip
+\item {} 5. K. Akibo, {\it Scientific American (Japanese Edition)},
+(January 1993), 20-29.
+\medskip
+\item {} 6. R. Reed, Ph.D. Thesis, University of Cambridge, (1987).
+\medskip
+\item {} 7. Phase Transormation Kinetics and Hardenability of Medium Alloy
+Steels, Climax \item {} Molybdenum Company, Connecticut, USA, (1972).
+\dv1
+\item{\bf 6.} {\largeb  Parameters}
+\bigskip
+\item {} {\bf Input parameters}
+\bigskip
+\item {} AW - real array of dimension 23
+\item {} \indent AW contains the input data from the file ACINPUT, which
+includes the chemical \indent composition of the steel. See Section 9.2 for details
+of an example file.
+\medskip
+\item {} AMIN - real array of dimension 23
+\item {} \indent AMIN contains the minimum unnormalised values of the input
+variables (from the \indent input files AC1 and AC3).
+\medskip
+\item {} AMAX - real array of dimension 23
+\item {} \indent AMAX contains the maximum unnormalised values of the input 
+variables (from the \indent input files AC1 and AC3).
+\medskip
+\item {} THETA1 - real array of dimension 4
+\item {} \indent THETA1 contains the biases associated with W1, and is
+read in from the file AC1.
+\medskip
+\item {} THETA2 - real 
+\item {} \indent THETA2 is the bias associated with W2, and is read
+in from the file AC1.
+\medskip
+\item {} W1 - real array of dimension (4,22)
+\item {} \indent W1 contains weights read in from the file AC1, which are
+coefficients used in the \indent prediction of the $Ac_1$ temperature.
+\medskip
+\item {} W2 - real array of dimension 4
+\item {} \indent W2 contains weights read in from the file AC1, which are
+coefficients used in the \indent  prediction of the $Ac_1$ temperature.
+\medskip
+\item {} THETB1 - real array of dimension 2
+\item {} \indent THETB1 contains the biases associated with W1B, and is read
+in from the file AC3.
+\medskip
+\item {} THETB2 - real 
+\item {} \indent THETB2 is the bias associated with W2B, and is read in from 
+the file AC3.
+\medskip
+\item {} W1B - real array of dimension (2,22)
+\item {} \indent W1B contains weights read in from the file AC3, which are
+coefficients used in the \indent  prediction of the $Ac_3$ temperature.
+\medskip
+\item {} W2B - real array of dimension 2
+\item {} \indent W2B contains weights read in from the file AC3, which are
+coefficients used in the \indent prediction of the $Ac_3$ temperature.
+\dvd
+\item {} {\bf Output parameters}
+\bigskip
+\item {} The program gives the $Ac_1$ and $Ac_3$ temperatures for a
+range of heating rates. See Section 9.3 for an example showing the format
+of the output.
+\dv1
+\item{\bf 7.} {\largeb  Error Indicators}
+\bigskip
+\item {} None
+\dv1
+\item{\bf 8.} {\largeb  Accuracy}
+\bigskip
+\item {} The neural net was trained using 394 examples from the available
+database.
+\medskip
+\item {} The error is set at +- 20\% for 95\% error limits.
+\medskip
+\item {} If the temperature should become negative during the course of the
+calculation of the $Ac_1$ or $Ac_3$ temperatures it is set to zero.
+\dv1
+\item{\bf 9.} {\largeb  Further Comments}
+\medskip
+\item {} None.
+\dv1
+\item{\bf 10.} {\largeb  Example}
+\bigskip
+\item{} {\bf 10.1 Program text}
+\bigskip
+\item {} Complete program.
+\dv1
+\item {} {\bf 10.2 Program data}
+\bigskip
+\item {} An example ACINPUT file:-
+\bigskip
+\item {0.2}\indent	 C
+\item {0.0}\indent 	 Si
+\item {0.0}\indent	 Mn
+\item {0.0}\indent 	 S
+\item {0.0}\indent	 P
+\item {0.0}\indent	 Cu
+\item {0.0}\indent	Ni
+\item {5.0}\indent	Cr
+\item {0.0}\indent	Mo
+\item {0.0}\indent	Nb
+\item {0.0}\indent	V
+\item {0.0}\indent	Ti
+\item {0.0}\indent     Al
+\item {0.0}\indent   B
+\item {0.0}\indent     W
+\item {0.0}\indent	As
+\item {0.0}\indent	Sn
+\item {0.0}\indent	Zr
+\item {0.0}\indent	Co
+\item {0.0}\indent	N
+\item {0.0}\indent	O
+\item {1.0}\indent	Heating rate
+\dv1
+\item {} {\bf 10.3 Program results}
+\bigskip
+\centerline       **      Austenite Formation Temperatures    **           
+\medskip
+\parindent=2.0in
+\item{Carbon     0.200  wt.\%} Silicon           0.000  wt.\%
+\item{Manganese    0.000  wt.\%} Sulphur            0.000 wt.\%
+\item{Phosphorus   0.000  wt.\%} Copper             0.000  wt.\%
+\item{Nickel       0.000  wt.\%} Chromium           5.000  wt.\%
+\item{Molybdenum   0.000  wt.\%} Niobium            0.0000 wt.\%   
+\item{Vanadium     0.000  wt.\%}
+\item{Titanium     0.000  wt.\%} Aluminium          0.000  wt.\%
+\item{Boron        0.0000 wt.\%} Tungsten           0.000  wt.\%
+\item{Arsenic      0.000  wt.\%} Tin                0.000  wt.\%
+\item{Zirconium    0.000  wt.\%} Cobalt             0.000  wt.\%
+\item{Nitrogen     0.0000 wt.\%} Oxygen             0.0000 wt.\%   
+\bigskip
+\dvd
+\parindent=1.5in
+\item{         Ac1 / C}       +- Error / C\indent Heating Rate / C/s
+\item{            856.}        $>$ 40.    \indent~~~~~~~~~0.0100
+\item{            856.}         ~~~40.    \indent~~~~~~~~~0.1000
+\item{            858.}         ~~~40.    \indent~~~~~~~~~1.0000
+\item{            874.}         ~~~40.    \indent~~~~~~~~~10.0000
+\item{            636.}         $>$ 40.   \indent~~~~~~~~~100.0000
+\medskip
+\item{         Ac3 / C}      +- Error / C\indent Heating Rate / C/s
+\item{            824.}        $>$ 40.   \indent~~~~~~~~~0.0100
+\item{            824.}         ~~~40.   \indent~~~~~~~~~0.1000
+\item{            826.}         ~~~40.   \indent~~~~~~~~~1.0000
+\item{            847.}         ~~~40.   \indent~~~~~~~~~10.0000
+\item{            903.}        $>$ 40.   \indent~~~~~~~~~100.0000
+\dv1
+\parindent=0.5in
+\item{\bf 11.} {\largeb  Auxiliary Routines}
+\bigskip
+\item {} MAP\_NEURAL\_AC1TEMP, MAP\_NEURAL\_AC3TEMP
+\dv1
+\item{\bf 12.} {\largeb  Keywords}
+\bigskip
+\item {} neural net, austenite formation
+\bye
+
